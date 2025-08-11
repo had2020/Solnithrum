@@ -1,2 +1,2 @@
 # Solnithrum
-Decentralized solana crypto wallet made in Rust for safety.
+Decentralized Solana crypto wallet made in Rust for safety.
