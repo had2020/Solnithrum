@@ -4,55 +4,57 @@
 use eframe::egui;
 
 fn main() -> eframe::Result {
-    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    //env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
         ..Default::default()
     };
     eframe::run_native(
-        "My egui App",
+        "Confirm exit",
         options,
-        Box::new(|cc| {
-            // This gives us image support:
-            egui_extras::install_image_loaders(&cc.egui_ctx);
-
-            Ok(Box::<MyApp>::default())
-        }),
+        Box::new(|_cc| Ok(Box::<MyApp>::default())),
     )
 }
 
+#[derive(Default)]
 struct MyApp {
-    name: String,
-    age: u32,
-}
-
-impl Default for MyApp {
-    fn default() -> Self {
-        Self {
-            name: "Arthur".to_owned(),
-            age: 42,
-        }
-    }
+    show_confirmation_dialog: bool,
+    allowed_to_close: bool,
 }
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("My egui Application");
-            ui.horizontal(|ui| {
-                let name_label = ui.label("Your name: ");
-                ui.text_edit_singleline(&mut self.name)
-                    .labelled_by(name_label.id);
-            });
-            ui.add(egui::Slider::new(&mut self.age, 0..=120).text("age"));
-            if ui.button("Increment").clicked() {
-                self.age += 1;
-            }
-            ui.label(format!("Hello '{}', age {}", self.name, self.age));
-
-            ui.image(egui::include_image!(
-                "../../../crates/egui/assets/ferris.png"
-            ));
+            ui.heading("Try to close the window");
         });
+
+        if ctx.input(|i| i.viewport().close_requested()) {
+            if self.allowed_to_close {
+                // do nothing - we will close
+            } else {
+                ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                self.show_confirmation_dialog = true;
+            }
+        }
+
+        if self.show_confirmation_dialog {
+            egui::Window::new("Do you want to quit?")
+                .collapsible(false)
+                .resizable(false)
+                .show(ctx, |ui| {
+                    ui.horizontal(|ui| {
+                        if ui.button("No").clicked() {
+                            self.show_confirmation_dialog = false;
+                            self.allowed_to_close = false;
+                        }
+
+                        if ui.button("Yes").clicked() {
+                            self.show_confirmation_dialog = false;
+                            self.allowed_to_close = true;
+                            ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
+                        }
+                    });
+                });
+        }
     }
 }
