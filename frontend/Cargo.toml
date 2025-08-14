@@ -1,5 +1,5 @@
 [package]
-name = "solnithrum"
+name = "frontend"
 version = "0.1.0"
 edition = "2021"
 description = "Decentralized Solana crypto wallet made in Rust for safety."

@@ -109,6 +109,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "frontend"
+version = "0.1.0"
+dependencies = [
+ "gloo-storage 0.3.0",
+ "wasm-bindgen",
+ "web-sys",
+ "yew",
+]
+
+[[package]]
 name = "futures"
 version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -911,16 +921,6 @@ name = "slab"
 version = "0.4.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04dc19736151f35336d325007ac991178d504a119863a2fcb3758cdb5e52c50d"
-
-[[package]]
-name = "solnithrum"
-version = "0.1.0"
-dependencies = [
- "gloo-storage 0.3.0",
- "wasm-bindgen",
- "web-sys",
- "yew",
-]
 
 [[package]]
 name = "syn"
