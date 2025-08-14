@@ -1,13 +1,7 @@
-# Solnithrum
-Decentralized Solana crypto wallet made in Rust for safety.
+Example showing some UI controls like `Label`, `TextEdit`, `Slider`, `Button`.
 
-dev run with
-```bash
-trunk serve
+```sh
+cargo run -p hello_world
 ```
 
-and build 
-```bash
-trunk build --release
-```
-note: files are in dist
+![](screenshot.png)
