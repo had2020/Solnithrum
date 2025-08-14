@@ -18,6 +18,14 @@ fn wave(name: &str, age: u8) -> String {
     format!("👋 Hello, {} year old named {}!", age, name)
 }
 
+#[post("/send", format = "json", data = "<msg>")]
+fn send(msg: &str) {
+    Json(MsgAck {
+        ok: true,
+        echoed: msg.0,
+    })
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()

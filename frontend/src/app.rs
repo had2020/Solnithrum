@@ -2,6 +2,7 @@ use gloo_storage::{LocalStorage, Storage};
 use web_sys::*;
 use yew::prelude::*;
 
+/*
 pub fn generate_key_pair() -> ([u8; 24], Vec<u8>) {
     let window = web_sys::window().unwrap();
     let crypto = window.crypto().unwrap();
@@ -15,6 +16,7 @@ pub fn save_key_pair() {
 }
 
 pub fn load_key_pair() {}
+*/
 
 #[function_component(App)]
 pub fn app() -> Html {
