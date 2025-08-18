@@ -2,6 +2,8 @@
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
 use eframe::egui;
+use serde::{Deserialize, Serialize};
+use solana_sdk::signature::{Keypair, Signer};
 
 fn main() -> eframe::Result {
     //env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -10,7 +12,7 @@ fn main() -> eframe::Result {
         ..Default::default()
     };
     eframe::run_native(
-        "Confirm exit",
+        "Solnithrum",
         options,
         Box::new(|_cc| Ok(Box::<MyApp>::default())),
     )
@@ -24,13 +26,29 @@ struct MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        let mut login_state: bool = false;
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("Try to close the window");
+            if login_state != true {
+                ui.heading("Try to close the window");
+
+                if ui.button("Create Wallet").clicked() {
+                    login_state = true;
+
+                    let keypair = Keypair::new();
+
+                    let pubkey = keypair.pubkey();
+                    let secret = keypair.to_bytes(); // 64 bytes
+
+                    println!("Public Key (address): {}", pubkey);
+                    println!("Private Key (64 bytes): {:?}", secret);
+                }
+                if ui.button("Login Wallet").clicked() {}
+            }
         });
 
         if ctx.input(|i| i.viewport().close_requested()) {
             if self.allowed_to_close {
-                // do nothing - we will close
+                // bye
             } else {
                 ctx.send_viewport_cmd(egui::ViewportCommand::CancelClose);
                 self.show_confirmation_dialog = true;
