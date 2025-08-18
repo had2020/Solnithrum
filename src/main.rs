@@ -2,8 +2,22 @@
 #![allow(rustdoc::missing_crate_level_docs)] // it's an example
 
 use eframe::egui;
-use serde::{Deserialize, Serialize};
+//use serde::{Deserialize, Serialize};
 use solana_sdk::signature::{Keypair, Signer};
+
+fn byte_to_bip39(secret: [u8; 64]) -> String {
+    let mut keyphrase: String = String::new();
+    for i in secret {
+        let word: &str = match i {
+            0 => "abandon",
+            1 => "ability",
+            2 => "able"
+            _ => "ERR",
+        };
+        keyphrase.push_str(word);
+    }
+    keyphrase
+}
 
 fn main() -> eframe::Result {
     //env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -29,7 +43,7 @@ impl eframe::App for MyApp {
         let mut login_state: bool = false;
         egui::CentralPanel::default().show(ctx, |ui| {
             if login_state != true {
-                ui.heading("Try to close the window");
+                ui.heading("A keypair is required for a Solana wallet.");
 
                 if ui.button("Create Wallet").clicked() {
                     login_state = true;
@@ -41,6 +55,8 @@ impl eframe::App for MyApp {
 
                     println!("Public Key (address): {}", pubkey);
                     println!("Private Key (64 bytes): {:?}", secret);
+
+                    ui.heading(byte_to_bip39(secret));
                 }
                 if ui.button("Login Wallet").clicked() {}
             }
