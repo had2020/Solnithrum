@@ -20,8 +20,14 @@ fn main() -> eframe::Result {
         viewport: egui::ViewportBuilder::default().with_inner_size([500.0, 350.0]),
         ..Default::default()
     };
-    let myapp = MyApp::new(String::new(), [0; 64]);
-    eframe::run_native("Solnithrum", options, Box::new(|_cc| Ok(Box::<MyApp>)))
+    eframe::run_native(
+        "Solnithrum",
+        options,
+        Box::new(|_cc| {
+            let myapp = MyApp::new(String::new(), [0; 64]);
+            Ok(Box::new(myapp))
+        }),
+    )
 }
 
 // global app vars here
@@ -48,26 +54,26 @@ impl MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let mut login_state: bool = false;
-        let mut secret: [u8; 64] = [0; 64];
         egui::CentralPanel::default().show(ctx, |ui| {
-            if login_state != true {
+            ui.heading(&format!("{}", self.login_state));
+            if self.login_state != true {
                 ui.heading("A keypair is required for a Solana wallet.");
 
                 if ui.button("Create Wallet").clicked() {
-                    login_state = true;
-
                     let keypair = Keypair::new();
 
-                    let pubkey = keypair.pubkey();
-                    secret = keypair.to_bytes().clone(); // 64 bytes
+                    self.pubkey = keypair.pubkey().to_string();
+                    self.secret = keypair.to_bytes().clone(); // 64 bytes
 
-                    println!("Public Key (address): {}", pubkey);
-                    //println!("Private Key (64 bytes): {:?}", secret);
+                    ui.label(format!("Public Address: {}", self.pubkey.clone()));
+                    ui.label(format!("Secret: s{}", byte_to_bip39(self.secret)));
+
+                    ui.label("It is recommended to record your Secret");
+                    if ui.button("Confirm").clicked() {
+                        self.login_state = true;
+                    }
                 }
                 if ui.button("Login Wallet").clicked() {}
-
-                ui.label(byte_to_bip39(secret));
             }
         });
 
