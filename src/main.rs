@@ -66,8 +66,8 @@ impl eframe::App for MyApp {
                     self.secret = keypair.to_bytes().clone(); // 64 bytes
 
                     ui.label(format!("Public Address: {}", self.pubkey.clone()));
-                    ui.label(format!("Secret: s{}", byte_to_bip39(self.secret)));
-
+                    ui.label(format!("Secret: {}", byte_to_bip39(self.secret)));
+                    ui.label(" ");
                     ui.label("It is recommended to record your Secret");
                     if ui.button("Confirm").clicked() {
                         self.login_state = true;
