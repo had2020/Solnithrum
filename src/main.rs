@@ -38,6 +38,8 @@ struct MyApp {
     pubkey: String,
     secret: [u8; 64],
     login_state: bool,
+    create_wallet: bool,
+    login_wallet: bool,
 }
 
 impl MyApp {
@@ -48,6 +50,8 @@ impl MyApp {
             pubkey: pubkey,
             secret: secret,
             login_state: false,
+            create_wallet: false,
+            login_wallet: false,
         }
     }
 }
@@ -55,16 +59,8 @@ impl MyApp {
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading(&format!("{}", self.login_state));
-            if self.login_state != true {
-                ui.heading("A keypair is required for a Solana wallet.");
-
-                if ui.button("Create Wallet").clicked() {
-                    let keypair = Keypair::new();
-
-                    self.pubkey = keypair.pubkey().to_string();
-                    self.secret = keypair.to_bytes().clone(); // 64 bytes
-
+            if !self.login_state {
+                if self.create_wallet {
                     ui.label(format!("Public Address: {}", self.pubkey.clone()));
                     ui.label(format!("Secret: {}", byte_to_bip39(self.secret)));
                     ui.label(" ");
@@ -72,8 +68,8 @@ impl eframe::App for MyApp {
                     if ui.button("Confirm").clicked() {
                         self.login_state = true;
                     }
+                } else if self.login_wallet {
                 }
-                if ui.button("Login Wallet").clicked() {}
             }
         });
 
@@ -101,6 +97,26 @@ impl eframe::App for MyApp {
                             self.show_confirmation_dialog = false;
                             self.allowed_to_close = true;
                             ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
+                        }
+                    });
+                });
+        }
+
+        if self.login_state != true && !self.create_wallet && !self.login_wallet {
+            egui::Window::new("New User")
+                .collapsible(false)
+                .resizable(false)
+                .show(ctx, |ui| {
+                    ui.horizontal(|ui| {
+                        ui.heading("Keypair is required for a Solana wallet.");
+                        if ui.button("Create Wallet").clicked() {
+                            let keypair = Keypair::new();
+                            self.pubkey = keypair.pubkey().to_string();
+                            self.secret = keypair.to_bytes().clone(); // 64 bytes
+                            self.create_wallet = true;
+                        }
+                        if ui.button("Login Wallet").clicked() {
+                            self.login_wallet = true;
                         }
                     });
                 });
