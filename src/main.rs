@@ -69,6 +69,8 @@ impl eframe::App for MyApp {
                         self.login_state = true;
                     }
                 } else if self.login_wallet {
+                    let s = ui.text_edit_singleline(&mut "");
+                    println!((format!("{:?}", s)));
                 }
             }
         });
