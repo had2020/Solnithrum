@@ -40,6 +40,7 @@ struct MyApp {
     login_state: bool,
     create_wallet: bool,
     login_wallet: bool,
+    temp_string: String,
 }
 
 impl MyApp {
@@ -52,6 +53,7 @@ impl MyApp {
             login_state: false,
             create_wallet: false,
             login_wallet: false,
+            temp_string: String::new(),
         }
     }
 }
@@ -69,9 +71,10 @@ impl eframe::App for MyApp {
                         self.login_state = true;
                     }
                 } else if self.login_wallet {
-                    let mut my_string: String = String::new();
+                    let mut my_string: String = self.temp_string.clone();
                     let response = ui.add(egui::TextEdit::singleline(&mut my_string));
                     if response.changed() {
+                        if response && String::new
                         println!("c:{}", my_string);
                     }
                 }
