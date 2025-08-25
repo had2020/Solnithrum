@@ -69,8 +69,11 @@ impl eframe::App for MyApp {
                         self.login_state = true;
                     }
                 } else if self.login_wallet {
-                    let s = ui.text_edit_singleline(&mut "");
-                    println!((format!("{:?}", s)));
+                    let mut my_string: String = String::new();
+                    let response = ui.add(egui::TextEdit::singleline(&mut my_string));
+                    if response.changed() {
+                        println!("c:{}", my_string);
+                    }
                 }
             }
         });
