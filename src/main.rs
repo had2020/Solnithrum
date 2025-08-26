@@ -74,8 +74,10 @@ impl eframe::App for MyApp {
                     let mut my_string: String = self.temp_string.clone();
                     let response = ui.add(egui::TextEdit::singleline(&mut my_string));
                     if response.changed() {
-                        if response && String::new
-                        println!("c:{}", my_string);
+                        if my_string != String::new() && ui.enterkey {
+                            self.temp_string = my_string.clone();
+                            println!("c:{}", my_string);
+                        }
                     }
                 }
             }
