@@ -74,7 +74,9 @@ impl eframe::App for MyApp {
                     let mut my_string: String = self.temp_string.clone();
                     let response = ui.add(egui::TextEdit::singleline(&mut my_string));
                     if response.changed() {
-                        if my_string != String::new() && ui.enterkey {
+                        if my_string != String::new()
+                            && !ui.input(|i| i.key_pressed(egui::Key::Enter))
+                        {
                             self.temp_string = my_string.clone();
                             println!("c:{}", my_string);
                         }
