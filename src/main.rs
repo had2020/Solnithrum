@@ -75,10 +75,12 @@ impl eframe::App for MyApp {
                     let response = ui.add(egui::TextEdit::singleline(&mut my_string));
                     if response.changed() {
                         if my_string != String::new()
-                            && !ui.input(|i| i.key_pressed(egui::Key::Enter))
+                            && !ui.input(|i| i.key_pressed(egui::Key::Backspace))
                         {
                             self.temp_string = my_string.clone();
-                            println!("c:{}", my_string);
+                        }
+                        if ui.input(|i| i.key_pressed(egui::Key::Enter)) {
+                            self.secret = self.temp_string;
                         }
                     }
                 }
