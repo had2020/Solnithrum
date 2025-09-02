@@ -127,6 +127,7 @@ impl eframe::App for MyApp {
                             self.pubkey = keypair.pubkey().to_string();
                             self.secret = keypair.to_bytes().clone(); // 64 bytes
                             self.create_wallet = true;
+                            //https://api.devnet.solana.com
                         }
                         if ui.button("Login Wallet").clicked() {
                             self.login_wallet = true;
