@@ -80,8 +80,6 @@ impl eframe::App for MyApp {
                         }
                         if ui.input(|i| i.key_pressed(egui::Key::Enter)) {
                             //self.secret = self.temp_string;
-                            //
-                            //
                         }
                     }
                 }
