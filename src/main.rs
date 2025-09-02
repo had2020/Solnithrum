@@ -128,6 +128,8 @@ impl eframe::App for MyApp {
                             self.secret = keypair.to_bytes().clone(); // 64 bytes
                             self.create_wallet = true;
                             //https://api.devnet.solana.com
+                            // https://docs.rs/solana-client/latest/solana_client/rpc_client/struct.RpcClient.html
+                            // https://docs.rs/solana-client/latest/solana_client/rpc_client/struct.RpcClient.html#method.confirm_transaction
                         }
                         if ui.button("Login Wallet").clicked() {
                             self.login_wallet = true;
